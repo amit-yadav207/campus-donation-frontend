@@ -46,7 +46,9 @@ import axios from "axios";
 
 // Create the AuthContext
 const AuthContext = createContext();
-const BASE_URL = "http://localhost:5000";
+// const BASE_URL = "http://localhost:5000";
+const BASE_URL='https://campus-donation-backend.onrender.com'
+
 // Custom hook to use auth context in any component
 export function useAuth() {
   return useContext(AuthContext);

@@ -1,7 +1,9 @@
 
 import axios from 'axios';
 
-const BASE_URL = 'http://localhost:5000'
+// const BASE_URL = 'http://localhost:5000'
+const BASE_URL='https://campus-donation-backend.onrender.com'
+
 export const sendEmail = async ({to,subject,body}) => {
   
     const token = localStorage.getItem('authToken'); // Retrieve the token
