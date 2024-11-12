@@ -36,6 +36,7 @@ import CampaignDetail from "../pages/CampaignDetail";
 import CreateCampaign from "../pages/CreateCampaign";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
+import VerifyAccount from '../pages/VerifyAccount';
 import ForgotPassword from "../pages/ForgotPassword";
 import ResetPassword from "../pages/ResetPassword";
 import AdminDashboard from "../pages/AdminDashboard";
@@ -63,6 +64,7 @@ const AppRoutes = () => {
       <Route path="/analytics" element={<DonorAnalytics />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/verify/:verificationToken" element={<VerifyAccount />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/reset-password/:token" element={<ResetPassword />} />
       <Route path="/verify-email" element={<EmailVerificationPage />} />

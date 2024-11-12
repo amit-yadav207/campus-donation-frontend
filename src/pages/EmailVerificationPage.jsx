@@ -41,13 +41,7 @@ const EmailVerificationPage = () => {
               A verification link has been sent to your email. Please verify your email to continue.
             </p>
             <p className="mt-4 text-sm text-gray-500">
-              If you didn't receive the email, check your spam folder or{" "}
-              <button
-                onClick={() => alert("Resend verification email functionality")}
-                className="text-blue-600"
-              >
-                Resend email
-              </button>
+              If you didn't receive the email, check your spam folder
             </p>
           </div>
         ) : (
