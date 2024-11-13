@@ -885,6 +885,7 @@ const CampaignDetail = () => {
   const [donationStatus, setDonationStatus] = useState(null);
   const [showModal, setShowModal] = useState(false); // State for modal visibility
   const [tid, setTid] = useState("xxxx1234");
+  const [donatedAmount,setDonatedAmount]=useState(0);
   const navigate = useNavigate();
   const { user } = useAuth();
   // let tid = "xxxxx12345"; //
@@ -920,6 +921,7 @@ const CampaignDetail = () => {
   };
 
   const handleSuccessfulDonation = async ({ paymentIntent, amount }) => {
+    setDonatedAmount(amount)
     setIsLoading(true);
     setDonationStatus(null);
 setPaymentStatus('Payment Initiated...')
@@ -1017,7 +1019,7 @@ setPaymentStatus('Payment Initiated...')
       <!-- Donation Details -->
       <div style="border-top: 2px solid #4CAF50;border-bottom: 1px solid #ddd; padding-bottom: 26px; padding-top: 20px;">
         <p><strong>Campaign:</strong> ${campaign?.title}</p>
-        <p><strong>Amount Donated:</strong> $${campaign?.goalAmount}</p>
+        <p><strong>Amount Donated:</strong> $${donatedAmount}</p>
         <p><strong>Date:</strong> ${new Date().toLocaleString()}</p>
        <p>Transaction ID: ${tid}</p>
       </div>
