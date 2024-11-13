@@ -57,8 +57,7 @@ const AppRoutes = () => {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/campaigns" element={<CampaignList />} />
-      <Route path="/campaigns/:id" element={<Elements stripe={stripePromise}><CampaignDetail /></Elements>} />
-
+      <Route path="/campaigns/:id" element={<AuthRoute element={<Elements stripe={stripePromise}><CampaignDetail /></Elements>}/>} />
       <Route path="/create-campaign" element={<CreateCampaign />} />
       <Route path="/donation-history/:userId" element={<AuthRoute element={<DonationHistory />} />}/>
       <Route path="/analytics" element={<DonorAnalytics />} />
