@@ -43,11 +43,9 @@
 
 import React, { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
-
+import { BASE_URL } from "../utils/constants";
 // Create the AuthContext
 const AuthContext = createContext();
-// const BASE_URL = "http://localhost:5000";
-const BASE_URL='https://campus-donation-backend.onrender.com'
 
 // Custom hook to use auth context in any component
 export function useAuth() {
@@ -80,8 +78,12 @@ export function AuthProvider({ children }) {
         `${BASE_URL}/api/auth/login`,
         credentials
       );
+      if (!response.data?.token || !response.data?.user) {
+        console.log(response.data)
+        return response.data;
+      }
       const { token, user } = response.data;
-
+      console.log("resp from be: ", response.data);
       if (token && user) {
         setToken(token);
         setUser(user);
@@ -93,9 +95,9 @@ export function AuthProvider({ children }) {
         // Set token as default in axios headers
         axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       }
-      return true;
     } catch (error) {
       console.error("Login error:", error);
+      return response.data;
     }
   }
 

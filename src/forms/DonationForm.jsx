@@ -79,24 +79,107 @@
 
 
 
+// import React, { useState } from 'react';
+// import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
+
+// import { getUserSecret } from '../services/donationService';
+// const DonationForm = ({ campaignId, onSuccessfulDonation }) => {
+//   const [amount, setAmount] = useState('');
+//   const stripe = useStripe();
+//   const elements = useElements();
+
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+//     if (!stripe || !elements) return;
+
+//     try {
+//       // const { data } = await axios.post(`http/api/campaigns/${campaignId}/donate`, { amount });
+
+//       const data=await getUserSecret({campaignId,amount})
+//       const  clientSecret  = data.clientSecret;
+
+//       const cardElement = elements.getElement(CardElement);
+//       const { paymentIntent, error } = await stripe.confirmCardPayment(clientSecret, {
+//         payment_method: { card: cardElement },
+//       });
+
+//       if (error) {
+//         console.error(error);
+//         alert('Payment failed. Please try again.');
+//       } else if (paymentIntent.status === 'succeeded') {
+//         alert('Donation successful! Thank you.');
+//         console.log("paymnet intentform ",paymentIntent)
+//         onSuccessfulDonation({paymentIntent,amount}); // Trigger post-payment action
+//       }
+//     } catch (error) {
+//       console.error('Error during donation:', error);
+//       alert('Donation failed. Please try again.');
+//     }
+//   };
+
+//   return (
+    
+
+
+
+//     <form onSubmit={handleSubmit} className="mb-6">
+//       <div>
+//         <label className="text-lg font-semibold">Donation Amount</label>
+//         <input
+//           type="number"
+//           value={amount}
+//           onChange={(e) => setAmount(e.target.value)}
+//           className="w-full p-3 mt-2 border-2 rounded-lg"
+//           placeholder="Enter amount"
+//           min="1"
+//         />
+//       </div>
+//       <div className="mt-6">
+//         <label className="text-lg font-semibold ">Payment Details</label>
+//        <div className='mt-4 '>
+//         <CardElement />
+//         </div>
+//       </div>
+//       <button
+//         type="submit"
+//         disabled={!stripe || !amount}
+//         className="mt-10 w-full bg-blue-600 text-white font-bold py-3  rounded-lg"
+//       >
+//         Donate Now
+//       </button>
+//     </form>
+
+
+
+
+
+//   );
+// };
+
+// export default DonationForm;
+
+
+
+
 import React, { useState } from 'react';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
-
 import { getUserSecret } from '../services/donationService';
+import { toast } from 'react-hot-toast'; // Import react-hot-toast
+import { ClipLoader } from 'react-spinners'; // Import ClipLoader from react-spinners
 const DonationForm = ({ campaignId, onSuccessfulDonation }) => {
   const [amount, setAmount] = useState('');
+  const [loading, setLoading] = useState(false); // State to manage loading status
   const stripe = useStripe();
   const elements = useElements();
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!stripe || !elements) return;
-
+setLoading(true)
     try {
-      // const { data } = await axios.post(`http/api/campaigns/${campaignId}/donate`, { amount });
-
-      const data=await getUserSecret({campaignId,amount})
-      const  clientSecret  = data.clientSecret;
+      const data = await getUserSecret({ campaignId, amount });
+      const clientSecret = data.clientSecret;
 
       const cardElement = elements.getElement(CardElement);
       const { paymentIntent, error } = await stripe.confirmCardPayment(clientSecret, {
@@ -105,23 +188,21 @@ const DonationForm = ({ campaignId, onSuccessfulDonation }) => {
 
       if (error) {
         console.error(error);
-        alert('Payment failed. Please try again.');
+        toast.error('Payment failed. Please try again.');
+        setLoading(false)
       } else if (paymentIntent.status === 'succeeded') {
-        alert('Donation successful! Thank you.');
-        console.log("paymnet intentform ",paymentIntent)
-        onSuccessfulDonation({paymentIntent,amount}); // Trigger post-payment action
+        // toast.success('Donation successful! Thank you.');
+        onSuccessfulDonation({ paymentIntent, amount }); // Trigger post-payment action
+        setLoading(false)
       }
     } catch (error) {
       console.error('Error during donation:', error);
-      alert('Donation failed. Please try again.');
+      // toast.error('Donation failed. Please try again.');
+      setLoading(false)
     }
   };
 
   return (
-    
-
-
-
     <form onSubmit={handleSubmit} className="mb-6">
       <div>
         <label className="text-lg font-semibold">Donation Amount</label>
@@ -135,24 +216,23 @@ const DonationForm = ({ campaignId, onSuccessfulDonation }) => {
         />
       </div>
       <div className="mt-6">
-        <label className="text-lg font-semibold ">Payment Details</label>
-       <div className='mt-4 '>
-        <CardElement />
+        <label className="text-lg font-semibold">Payment Details</label>
+        <div className="mt-4">
+          <CardElement />
         </div>
       </div>
       <button
         type="submit"
         disabled={!stripe || !amount}
-        className="mt-10 w-full bg-blue-600 text-white font-bold py-3  rounded-lg"
+        className="mt-10 w-full bg-blue-600 text-white font-bold py-3 rounded-lg"
       >
-        Donate Now
+      {loading ? (
+          <ClipLoader color="#ffffff" size={30} /> // Show the spinner if loading
+        ) : (
+          'Donate Now'
+        )}
       </button>
     </form>
-
-
-
-
-
   );
 };
 

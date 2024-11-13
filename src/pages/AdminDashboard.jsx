@@ -1565,6 +1565,8 @@ import React, { useEffect, useState } from 'react';
 import { getAllCampaigns, deleteCampaign, updateCampaignStatus, getAllUsers, deleteUser } from '../services/adminService';
 import { FaTrashAlt, FaTimes } from 'react-icons/fa';
 import { Oval } from 'react-loader-spinner';
+import { toast } from 'react-hot-toast'; // Import react-hot-toast
+
 
 const AdminDashboard = () => {
   const [campaigns, setCampaigns] = useState([]);
@@ -1607,37 +1609,62 @@ const AdminDashboard = () => {
     fetchUsers();
   }, []);
 
-  const handleDeleteCampaign = async (id) => {
-    try {
-      await deleteCampaign(id);
+  
+const handleDeleteCampaign = async (id) => {
+  toast.promise(
+    deleteCampaign(id),
+    {
+      loading: 'Deleting campaign...',
+      success: 'Campaign deleted successfully!',
+      error: 'Error deleting campaign!',
+    }
+  )
+    .then(() => {
       setCampaigns(campaigns.filter((campaign) => campaign._id !== id));
       setFilteredCampaigns(filteredCampaigns.filter((campaign) => campaign._id !== id));
-    } catch (error) {
+    })
+    .catch((error) => {
       console.error('Error deleting campaign:', error);
-    }
-  };
+    });
+};
 
-  const handleDeleteUser = async (id) => {
-    try {
-      await deleteUser(id);
+const handleDeleteUser = async (id) => {
+  toast.promise(
+    deleteUser(id),
+    {
+      loading: 'Deleting user...',
+      success: 'User deleted successfully!',
+      error: 'Error deleting user!',
+    }
+  )
+    .then(() => {
       setUsers(users.filter((user) => user._id !== id));
       setFilteredUsers(filteredUsers.filter((user) => user._id !== id));
-    } catch (error) {
+    })
+    .catch((error) => {
       console.error('Error deleting user:', error);
-    }
-  };
+    });
+};
 
-  const handleChangeStatus = async (campaignId, newStatus) => {
-    try {
-      await updateCampaignStatus(campaignId, newStatus);
+const handleChangeStatus = async (campaignId, newStatus) => {
+  toast.promise(
+    updateCampaignStatus(campaignId, newStatus),
+    {
+      loading: 'Changing status...',
+      success: 'Status updated successfully!',
+      error: 'Error updating status!',
+    }
+  )
+    .then(() => {
       setCampaigns(campaigns.map((campaign) =>
         campaign._id === campaignId ? { ...campaign, status: newStatus } : campaign
       ));
       filterCampaigns(filterStatus);
-    } catch (error) {
+    })
+    .catch((error) => {
       console.error('Error changing campaign status:', error);
-    }
-  };
+    });
+};
 
   const closeModal = () => {
     setSelectedCampaign(null);
@@ -1701,40 +1728,40 @@ const AdminDashboard = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
         {filteredCampaigns.map((campaign) => (
           <div
-            key={campaign._id}
-            className="p-6 bg-white rounded-lg shadow-lg hover:shadow-xl transition cursor-pointer"
-            onClick={() => setSelectedCampaign(campaign)}
-          >
-            <h3 className="text-xl font-semibold mb-2">{campaign.title}</h3>
-            <div className="flex items-center mb-4">
-              <span
-                className={`px-2 pb-0.5 font-thin text-xs rounded-full text-white shadow ${campaign.status === 'active' ? 'bg-green-500' : 'bg-red-500'}`}
-              >
-                {campaign.status === 'active' ? 'Active' : 'Pending'}
-              </span>
-              {/* Add a button to toggle the status */}
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  const newStatus = campaign.status === 'active' ? 'pending' : 'active';
-                  handleChangeStatus(campaign._id, newStatus);
-                }}
-                className="ml-4 text-blue-500 hover:text-blue-700"
-                title='double click to toggle'
-              >
-                Toggle Status
-              </button>
-            </div>
-            <div className="flex justify-end mt-4">
-              <FaTrashAlt
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleDeleteCampaign(campaign._id);
-                }}
-                className="text-red-500 cursor-pointer hover:text-red-700"
-              />
-            </div>
-          </div>
+  key={campaign._id}
+  className="p-6 bg-gradient-to-r from-gray-100 via-gray-200 to-gray-300 rounded-lg shadow-lg hover:shadow-xl transition cursor-pointer"
+  onClick={() => setSelectedCampaign(campaign)}
+>
+  <h3 className="text-xl font-semibold mb-2">{campaign.title}</h3>
+  <div className="flex items-center mb-4">
+    <span
+      className={`px-2 pb-0.5 font-thin text-xs rounded-full text-white shadow ${campaign.status === 'active' ? 'bg-green-500' : 'bg-red-500'}`}
+    >
+      {campaign.status === 'active' ? 'Active' : 'Pending'}
+    </span>
+    <button
+      onClick={(e) => {
+        e.stopPropagation();
+        const newStatus = campaign.status === 'active' ? 'pending' : 'active';
+        handleChangeStatus(campaign._id, newStatus);
+      }}
+      className="ml-4 text-blue-500 hover:text-blue-700"
+      title='double click to toggle'
+    >
+      Toggle Status
+    </button>
+  </div>
+  <div className="flex justify-end mt-4">
+    <FaTrashAlt
+      onClick={(e) => {
+        e.stopPropagation();
+        handleDeleteCampaign(campaign._id);
+      }}
+      className="text-red-500 cursor-pointer hover:text-red-700"
+    />
+  </div>
+</div>
+
         ))}
       </div>
 
@@ -1758,23 +1785,24 @@ const AdminDashboard = () => {
       {/* Users List */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
         {filteredUsers.map((user) => (
-          <div
-            key={user._id}
-            className="p-6 bg-white rounded-lg shadow-lg hover:shadow-xl transition cursor-pointer"
-            onClick={() => setSelectedUser(user)}
-          >
-            <h3 className="text-xl font-semibold mb-2">{user.name}</h3>
-            <p className="text-gray-600">Email: {user.email}</p>
-            <div className="flex justify-end mt-4">
-              <FaTrashAlt
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleDeleteUser(user._id);
-                }}
-                className="text-red-500 cursor-pointer hover:text-red-700"
-              />
-            </div>
-          </div>
+         <div
+  key={user._id}
+  className="p-6 bg-gradient-to-r from-gray-100 via-gray-200 to-gray-300 rounded-lg shadow-lg hover:shadow-xl transition cursor-pointer"
+  onClick={() => setSelectedUser(user)}
+>
+  <h3 className="text-xl font-semibold mb-2">{user.name}</h3>
+  <p className="text-gray-600">Email: {user.email}</p>
+  <div className="flex justify-end mt-4">
+    <FaTrashAlt
+      onClick={(e) => {
+        e.stopPropagation();
+        handleDeleteUser(user._id);
+      }}
+      className="text-red-500 cursor-pointer hover:text-red-700"
+    />
+  </div>
+</div>
+
         ))}
       </div>
 

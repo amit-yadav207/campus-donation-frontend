@@ -4,7 +4,7 @@ import AppRoutes from "./routes/index.jsx"; // Import your routes
 import { AuthProvider } from "./context/AuthContext";
 import Navbar from "./components/Navbar"; // Global Navbar component
 import Footer from "./components/Footer"; // Global Footer component
-
+import { Toaster } from "react-hot-toast"; // Import Toaster
 function App() {
   return (
     <AuthProvider>
@@ -15,6 +15,7 @@ function App() {
 
           {/* Main Content with Routing */}
           <main className="flex-grow">
+          <Toaster position="top-center" reverseOrder={false} />
             <AppRoutes />
           </main>
 

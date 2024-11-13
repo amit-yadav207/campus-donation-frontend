@@ -241,6 +241,13 @@ import {
   FaRegCheckCircle,
 } from "react-icons/fa"; // Importing icons from react-icons
 
+import { Oval } from 'react-loader-spinner';
+
+
+
+
+
+
 const DonationHistory = () => {
   const { userId } = useParams(); // Get the userId from URL params
   const navigate = useNavigate();
@@ -268,9 +275,8 @@ const DonationHistory = () => {
 
   if (loading) {
     return (
-      <div className="text-center">
-        <div className="spinner-border" role="status"></div>
-        <span>Loading...</span>
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <Oval color="#00BFFF" height={80} width={80} />
       </div>
     );
   }

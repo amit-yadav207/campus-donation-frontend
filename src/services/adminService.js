@@ -27,9 +27,7 @@
 
 
 import axios from 'axios';
-
-// const BASE_URL = 'http://localhost:5000';
-const BASE_URL='https://campus-donation-backend.onrender.com';
+import { BASE_URL } from '../utils/constants';
 const API_URL = `${BASE_URL}/api`; // Update the base URL to your API endpoint
 
 export const getAllCampaigns = async () => {

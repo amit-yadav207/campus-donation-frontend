@@ -533,8 +533,8 @@ const DonorAnalytics = () => {
             </tr>
           </thead>
           <tbody>
-            {campaigns.map((campaign) => (
-              <tr key={campaign.id}>
+            {campaigns.map((campaign,index) => (
+              <tr key={index}>
                 <td className="py-2 px-4 border">{campaign.title}</td>
                 <td className="py-2 px-4 border">${campaign.totalAmount}</td>
                 <td className="py-2 px-4 border">${campaign.goalAmount}</td>

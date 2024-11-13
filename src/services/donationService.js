@@ -8,8 +8,7 @@
 
 import axios from 'axios';
 
-// const BASE_URL = 'http://localhost:5000'
-const BASE_URL='https://campus-donation-backend.onrender.com'
+import { BASE_URL } from '../utils/constants';
 
 export const makeDonation = async (donationData) => {
     const id = donationData.campaignId

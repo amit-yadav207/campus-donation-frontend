@@ -1,7 +1,7 @@
 import axios from 'axios';
+import { BASE_URL } from '../utils/constants';
 
-// const BASE_URL='http://localhost:5000'
-const BASE_URL='https://campus-donation-backend.onrender.com'
+
 
 // Function for user login
 export const login = async (credentials) => {

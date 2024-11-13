@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { ClipLoader } from "react-spinners"; // Importing the ClipLoader spinner
+import { BASE_URL } from '../utils/constants';
 
 const VerifyAccount = () => {
   const {verificationToken }= useParams();
@@ -15,7 +16,7 @@ const VerifyAccount = () => {
       try {
         setIsLoading(true);
         // const backendUrl =  'http://localhost:5000'; // Fallback for local testing
-        const backendUrl='https://campus-donation-backend.onrender.com'
+        const backendUrl=BASE_URL
         console.log("Verifying with URL:", `${backendUrl}/api/auth/verify/${token}`);
         
         const response = await axios.get(`${backendUrl}/api/auth/verify/${token}`);

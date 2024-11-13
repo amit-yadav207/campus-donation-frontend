@@ -109,14 +109,14 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import img from '../assets/donation image.avif';
-
+import {toast} from 'react-hot-toast'
 const CampaignCard = ({ campaign }) => {
   const navigate = useNavigate();
 
   const shareCampaign = () => {
     const shareUrl = `${window.location.origin}/campaigns/${campaign._id}`;
     navigator.clipboard.writeText(shareUrl);
-    alert('Campaign link copied to clipboard!');
+    toast.success('Campaign link copied to clipboard!');
   };
 
   return (
